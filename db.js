@@ -7,10 +7,8 @@ const connection = mysql.createConnection({
   password: process.env.PASSWORD
 });
 
-connection.addListener('error', (err) => {
-  console.log(err);
+connection.addListener('error', (error) => {
+  console.error('Database connection error:', error);
 });
 
-// ...database queries here
-
-connection.end();
+module.exports = connection;

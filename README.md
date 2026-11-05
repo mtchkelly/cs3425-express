@@ -1,21 +1,66 @@
 # Javascript Template for CS3425 Course Project
 You may use javascript for the course project instead of php. This template contains dependencies and basic structure to get you started. 
 
-## Requirements & How to Run It
-This version of the course project will be developed and run on your local machine, not remotely on guardian/colossus.
-
-### Required Software:
+## Required Software:
 * Internet browser (ex. Chrome, Firefox)
 * [NodeJS](https://nodejs.org/en/download) - Installed via Node Version Manager (nvm) or via prebuilt installer.
 * [Git](https://git-scm.com/install/) *(Optional)* - Version control software helpful for collaborating with your group members.
-* [Visual Studio Code](https://code.visualstudio.com/download) *(Optional)* - IDE recommended for development, integrates with git.
+* [Visual Studio Code](https://code.visualstudio.com/download) *(Optional)* - Integrated Development Environment recommended for development, integrates with git.
+
+## Getting Started
+
+This version of the course project will be developed and run on your local machine, not remotely on guardian/colossus. Install dependencies, create a local .env file with your database credentials, and start the server:
+
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Open <http://localhost:3000/> in a browser. The application can also be started directly with `node app.js`.
+
+The `.env` file contains database credentials and the session secret. It is ignored by Git and should never be committed.
+
+Session data is available on `req.session` in every route. For example:
+
+```js
+req.session.userId = user.id;
+const userId = req.session.userId;
+```
+
+### Running database queries
+
+The template uses one MySQL connection for the application. Students can use the connection directly with the MySQL driver:
+
+```js
+const connection = require('./db');
+
+router.get('/users/:id', (req, res, next) => {
+  connection.execute(
+    'SELECT * FROM users WHERE id = ?',
+    [req.params.id],
+    (error, rows) => {
+      if (error) {
+        next(error);
+        return;
+      }
+
+      res.json(rows);
+    }
+  );
+});
+```
+
+Do not call `connection.end()` in a route. The application closes the connection when it exits.
 
 ## Project structure:
-`app.js`: Starting point and main source code for the Express server.
+`app.js`: Express application and executable starting point for the web server.
 
-`db.js`: Database connection and lower level db helper functions.
+`router.js`: Specifies the functions and/or HTML pages to serve based on the HTTP method and route access by the client. For example, send the home page (index.ejs) when a client accesses the root route '/' (classdb.it.mtu.edu**/**).
 
-`.env`: Contains secrets like your database username & password so they are not hardcoded and tracked in version control. These values are accessible in the source code through `process.env.[VARIABLE_NAME]`.
+`db.js`: The exported MySQL `connection` is available for direct use and is closed by `app.js` during shutdown.
+
+`.env`: Contains secrets like your database username and password so they are not hardcoded or tracked in version control. These values are accessible through `process.env.[VARIABLE_NAME]`.
 
 `package.json`: Project settings and dependencies are specified here.
 
@@ -25,6 +70,10 @@ This version of the course project will be developed and run on your local machi
 
   `views/partials/`: Smaller sections of a full ejs file that get shared across several templates.
 
-`routes/`: These files specify the functions and/or HTML pages to serve based on the HTTP method and route access by the client. For example, send the home page (index.ejs) when a client accesses the root route '/' (classdb.it.mtu.edu**/**).
+`public/`: Static files accessible directly by the client including front-end javascript, css, and images.
 
-`public/`: Static files accessible by the client including front-end javascript, css, and images.
+## Useful Resources
+* [ExpressJs Documentation](https://expressjs.com/en/5x/guide/routing/)
+* [Embedded Javascript (ejs) Documentation](https://ejs.co/docs/)
+* [MySQL2 dependency documentation](https://sidorares.github.io/node-mysql2/docs/documentation)
+* [Express-session dependecy documentation](https://github.com/expressjs/session#readme)
