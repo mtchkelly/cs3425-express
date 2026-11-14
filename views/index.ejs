@@ -3,4 +3,13 @@
 <h1>Hello world!</h1>
 <p>Oh the places we'll go!</p>
 
+<% if (user) { %>
+  <span>Signed in as <strong><%= user.username %></strong></span>
+  <form action="/logout" method="POST">
+    <button type="submit">Log out</button>
+  </form>
+<% } else { %>
+  <a href="/login">Log in example</a>
+<% } %>
+
 <%- include('partials/footer'); -%>

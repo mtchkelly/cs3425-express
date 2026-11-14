@@ -1,14 +1,23 @@
-const express = require('express');
+import express from 'express';
+import * as controller from './controller.js';
+
 const router = express.Router();
 
-// GET home page
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'CS3425 Course Project' });
+router.get('/', (req, res) => {
+	res.render('index', { title: 'CS3425 Course Project' });
 });
 
-// GET another page
-router.get('/page', function(req, res, next) {
-  res.send('respond with a resource');
-});
+// database connection example
+router.get('/dbtest', controller.getDatabaseTest);
 
-module.exports = router;
+// login and session use examples
+router.get('/login', (req, res) => {
+	res.render('login', { title: 'Login' });
+});
+router.post('/login', controller.postLogin);
+router.post('/logout', controller.postLogout);
+
+// url parameter example
+router.get('/params/:id', controller.getParameter);
+
+export default router;
