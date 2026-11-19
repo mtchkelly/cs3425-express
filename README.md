@@ -105,9 +105,13 @@ req.session.destroy((err) => {
 });
 ```
 
+### Password Hashing
+
+You can use the npm package [bcrypt](https://www.npmjs.com/package/bcrypt) to hash passwords in your application code instead of relying on database functions like `sha2()`. Follow the examples in package description.
+
 ## Next Steps & Tips
 
-Keep your code well documented and organized. This may involve spliting your controller and router into separate modules, or making services that handle frequently used database operations.
+Keep your code well documented and organized. This may involve splitting your controller and router into separate modules, or making services that handle frequently used database operations.
 
 The server will automatically restart when it detects changes in its source code. You must refresh your browser to see new changes in the ejs template files.
 
